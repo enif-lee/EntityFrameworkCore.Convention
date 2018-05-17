@@ -15,14 +15,14 @@ namespace EntityFrameworkCore.Convention.Extensions
 
         public static string ToSnakeCase(this string original) => ProcessIfNotEmpty(original, ToSnakeCase);
 
-        public static string ProcessIfNotEmpty(string original, Func<IEnumerable<string>, string> processor)
+        private static string ProcessIfNotEmpty(string original, Func<IEnumerable<string>, string> processor)
         {
             return string.IsNullOrEmpty(original?.Trim())
                 ? string.Empty
                 : processor(Spliter.Split(original));
         }
 
-        public static string ToCamelCase(this IEnumerable<string> words)
+        private static string ToCamelCase(this IEnumerable<string> words)
         {
             var wordsArray = words as string[] ?? words.ToArray();
 
@@ -32,7 +32,7 @@ namespace EntityFrameworkCore.Convention.Extensions
                    );
         }
 
-        public static string ToKebobCase(this IEnumerable<string> words)
+        private static string ToKebobCase(this IEnumerable<string> words)
         {
             return string.Join("-", words.Select(word => word.ToLower()));
         }

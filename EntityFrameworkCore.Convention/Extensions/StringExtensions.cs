@@ -1,23 +1,45 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace EntityFrameworkCore.Convention.Extensions
 {
     public static class StringExtensions
     {
-        private static Regex _regex = new Regex(@"[\s|\-|_]+");
+        private static readonly Regex Spliter = new Regex(@"[\s|\-|_]+");
 
-        public static string ToCamelCase(this string original)
+        public static string ToCamelCase(this string original) => ProcessIfNotEmpty(original, ToCamelCase);
+
+        public static string ToKebobCase(this string original) => ProcessIfNotEmpty(original, ToKebobCase);
+
+        public static string ToSnakeCase(this string original) => ProcessIfNotEmpty(original, ToSnakeCase);
+
+        public static string ProcessIfNotEmpty(string original, Func<IEnumerable<string>, string> processor)
         {
-            if (string.IsNullOrEmpty(original?.Trim()))
-                return string.Empty;
+            return string.IsNullOrEmpty(original?.Trim())
+                ? string.Empty
+                : processor(Spliter.Split(original));
+        }
 
-            var words = _regex.Split(original);
+        public static string ToCamelCase(this IEnumerable<string> words)
+        {
+            var wordsArray = words as string[] ?? words.ToArray();
 
-            return words[0].ToLower() + string.Join(
+            return wordsArray.First().ToLower() + string.Join(
                        "",
-                       words.Skip(1).Select(word => word.Substring(0, 1).ToUpper() + word.Substring(1))
+                       wordsArray.Skip(1).Select(word => word.Substring(0, 1).ToUpper() + word.Substring(1))
                    );
+        }
+
+        public static string ToKebobCase(this IEnumerable<string> words)
+        {
+            return string.Join("-", words.Select(word => word.ToLower()));
+        }
+
+        private static string ToSnakeCase(IEnumerable<string> words)
+        {
+            return string.Join("_", words.Select(word => word.ToLower()));
         }
     }
 }

@@ -9,13 +9,13 @@ namespace EntityFrameworkCore.Convention.Extensions
     {
         private static readonly Regex Spliter = new Regex(@"[\s|\-|_]+");
 
-        public static string ToCamelCase(this string original) => ProcessIfNotEmpty(original, ToCamelCase);
+        public static string ToCamelCase(this string original) => ConvertIfNotEmpty(original, ToCamelCase);
 
-        public static string ToKebobCase(this string original) => ProcessIfNotEmpty(original, ToKebobCase);
+        public static string ToKebobCase(this string original) => ConvertIfNotEmpty(original, ToKebobCase);
 
-        public static string ToSnakeCase(this string original) => ProcessIfNotEmpty(original, ToSnakeCase);
+        public static string ToSnakeCase(this string original) => ConvertIfNotEmpty(original, ToSnakeCase);
 
-        private static string ProcessIfNotEmpty(string original, Func<IEnumerable<string>, string> processor)
+        private static string ConvertIfNotEmpty(string original, Func<IEnumerable<string>, string> processor)
         {
             return string.IsNullOrEmpty(original?.Trim())
                 ? string.Empty

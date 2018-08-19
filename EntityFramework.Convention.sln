@@ -2,7 +2,13 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore.Convention", "EntityFrameworkCore.Convention\EntityFrameworkCore.Convention.csproj", "{74D7FE4C-731F-4759-A788-855754EDBD7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore.Convention.Test", "EntityFrameworkCore.Convention.Test\EntityFrameworkCore.Convention.Test.csproj", "{BFC9F449-589C-4E52-B054-8D8A9FB14B4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore.Convention.Test", "EntityFrameworkCore.Convention.Test\EntityFrameworkCore.Convention.Test.csproj", "{C1BF6545-0F52-4F45-B2FD-D490AE967C65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{44CCB39C-3218-43AD-B615-4D46276B3CBF}"
+ProjectSection(SolutionItems) = preProject
+	README.md = README.md
+	.gitignore = .gitignore
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +20,9 @@ Global
 		{74D7FE4C-731F-4759-A788-855754EDBD7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74D7FE4C-731F-4759-A788-855754EDBD7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74D7FE4C-731F-4759-A788-855754EDBD7F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BFC9F449-589C-4E52-B054-8D8A9FB14B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BFC9F449-589C-4E52-B054-8D8A9FB14B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BFC9F449-589C-4E52-B054-8D8A9FB14B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BFC9F449-589C-4E52-B054-8D8A9FB14B4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1BF6545-0F52-4F45-B2FD-D490AE967C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1BF6545-0F52-4F45-B2FD-D490AE967C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1BF6545-0F52-4F45-B2FD-D490AE967C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1BF6545-0F52-4F45-B2FD-D490AE967C65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

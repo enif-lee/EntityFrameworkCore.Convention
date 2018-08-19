@@ -1,40 +1,39 @@
-﻿using EntityFrameworkCore.Convention.Extensions;
+using EntityFrameworkCore.Convention.Extensions;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace EntityFrameworkCore.Convention.Test.Extensions
 {
-    [TestClass]
     public class StringExtensionsTest
     {
-        [TestMethod]
-        [DataRow("snake_case", "snakeCase")]
-        [DataRow("kebob-case", "kebobCase")]
-        [DataRow("Title Case", "titleCase")]
-        [DataRow("Title     Case", "titleCase")]
-        [DataRow("      ", "")]
+        [Test]
+        [TestCase("snake_case", "snakeCase")]
+        [TestCase("kebob-case", "kebobCase")]
+        [TestCase("Title Case", "titleCase")]
+        [TestCase("Title     Case", "titleCase")]
+        [TestCase("      ", "")]
         public void ToCamelCaseTest(string original, string expected)
         {
             original.ToCamelCase().Should().Be(expected);
         }
 
-        [TestMethod]
-        [DataRow("snake_case", "snake-case")]
-        [DataRow("kebob-case", "kebob-case")]
-        [DataRow("Title Case", "title-case")]
-        [DataRow("Title     Case", "title-case")]
-        [DataRow("      ", "")]
+        [Test]
+        [TestCase("snake_case", "snake-case")]
+        [TestCase("kebob-case", "kebob-case")]
+        [TestCase("Title Case", "title-case")]
+        [TestCase("Title     Case", "title-case")]
+        [TestCase("      ", "")]
         public void ToKebobCaseTest(string original, string expected)
         {
             original.ToKebobCase().Should().Be(expected);
         }
 
-        [TestMethod]
-        [DataRow("snake_case", "snake_case")]
-        [DataRow("kebob-case", "kebob_case")]
-        [DataRow("Title Case", "title_case")]
-        [DataRow("Title     Case", "title_case")]
-        [DataRow("      ", "")]
+        [Test]
+        [TestCase("snake_case", "snake_case")]
+        [TestCase("kebob-case", "kebob_case")]
+        [TestCase("Title Case", "title_case")]
+        [TestCase("Title     Case", "title_case")]
+        [TestCase("      ", "")]
         public void ToSnakeCaseTest(string original, string expected)
         {
             original.ToSnakeCase().Should().Be(expected);

@@ -1,5 +1,7 @@
 # EntityFrameworkCore.Convention
+> Life is short, use `EntityFrameworkCore.Convention`
 
+We have always done same thing when we started every EntityFrameworkCore project.
 This is a library that collects frequently used / implemented functions as below.
 
 ### Features
@@ -80,6 +82,7 @@ optionsBuilder
 ### Contribute Guide
 
 First of all, We need to conversation through issue or PR about some your great idea.
+
 (Please let us know your issue before register PR so that your thoughts will not be in vain.)
 
 ### License

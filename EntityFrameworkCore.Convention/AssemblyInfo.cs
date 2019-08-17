@@ -1,1 +1,3 @@
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("EntityFrameworkCore.Convention.Test")]
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("EntityFrameworkCore.Convention.Test")]

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using EntityFrameworkCore.Convention.Extensions;
+using EntityFrameworkCore.Convention.Helpers;
 
 namespace EntityFrameworkCore.Convention
 {
@@ -13,6 +13,7 @@ namespace EntityFrameworkCore.Convention
         public static NamingConvention CamelCase = new NamingConvention(StringHelper.ToCamelCase);
         public static NamingConvention LowerSnakeCase = new NamingConvention(StringHelper.ToLowerSnakeCase);
         public static NamingConvention UpperSnakeCase = new NamingConvention(StringHelper.ToUpperSnakeCase);
+        public static NamingConvention PascalCase = new NamingConvention(StringHelper.ToPascalCase);
         private readonly Func<string[], string> _joiner;
 
         internal NamingConvention(Func<string[], string> joiner)

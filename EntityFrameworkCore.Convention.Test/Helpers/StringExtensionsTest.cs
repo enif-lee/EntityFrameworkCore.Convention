@@ -1,8 +1,8 @@
-using EntityFrameworkCore.Convention.Extensions;
+using EntityFrameworkCore.Convention.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace EntityFrameworkCore.Convention.Test.Extensions
+namespace EntityFrameworkCore.Convention.Test.Helpers
 {
     public class StringExtensionsTest
     {
@@ -24,6 +24,12 @@ namespace EntityFrameworkCore.Convention.Test.Extensions
         public void ToUpperSnakeCaseTest()
         {
             StringHelper.ToUpperSnakeCase(_words).Should().Be("I_LOVE_YOU_FOREVER");
+        }
+
+        [Test]
+        public void ToPascalCaseTest()
+        {
+            StringHelper.ToPascalCase(_words).Should().Be("ILoveYouForever");
         }
     }
 }

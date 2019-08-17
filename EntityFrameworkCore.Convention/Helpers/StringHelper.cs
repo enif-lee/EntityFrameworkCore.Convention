@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace EntityFrameworkCore.Convention.Extensions
+namespace EntityFrameworkCore.Convention.Helpers
 {
     public static class StringHelper
     {
@@ -21,14 +21,14 @@ namespace EntityFrameworkCore.Convention.Extensions
             var wordsArray = words as string[] ?? words.ToArray();
 
             return wordsArray.First().ToLower() + string.Join(
-                       "",
+                       string.Empty,
                        wordsArray.Skip(1).Select(word => word.Substring(0, 1).ToUpper() + word.Substring(1))
                    );
         }
 
-        private static string ToKebobCase(this IEnumerable<string> words)
+        internal static string ToPascalCase(IEnumerable<string> words)
         {
-            return string.Join("-", words.Select(word => word.ToLower()));
+            return string.Join(string.Empty, words.Select(word => word.Substring(0, 1).ToUpper() + word.Substring(1)));
         }
 
         internal static string ToLowerSnakeCase(IEnumerable<string> words)

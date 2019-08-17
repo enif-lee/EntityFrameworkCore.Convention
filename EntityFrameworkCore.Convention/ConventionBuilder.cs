@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using EntityFrameworkCore.Convention.Attributes;
-using EntityFrameworkCore.Convention.Extensions;
+using EntityFrameworkCore.Convention.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;

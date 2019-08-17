@@ -1,7 +1,7 @@
 # EntityFrameworkCore.Convention
 > Life is short, use `EntityFrameworkCore.Convention`
 
-[![Build status](https://ci.appveyor.com/api/projects/status/4ae0j3ca0ipkp0mi/branch/master?svg=true)](https://ci.appveyor.com/project/jinseoung-lee/entityframeworkcore-convention/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/7lsoshhc7ju8ug09/branch/master?svg=true)](https://ci.appveyor.com/project/enif-lee/entityframeworkcore-convention/branch/master)
 
 We have always done same thing when we started every EntityFrameworkCore project.
 This is a library that collects frequently used / implemented functions as below.

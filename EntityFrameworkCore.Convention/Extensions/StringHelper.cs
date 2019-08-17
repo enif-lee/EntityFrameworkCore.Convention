@@ -5,24 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace EntityFrameworkCore.Convention.Extensions
 {
-    public static class StringExtensions
+    public static class StringHelper
     {
         private static readonly Regex Spliter = new Regex(@"[\s|\-|_]+");
-
-        public static string ToCamelCase(this string original)
-        {
-            return ConvertIfNotEmpty(original, ToCamelCase);
-        }
-
-        public static string ToKebobCase(this string original)
-        {
-            return ConvertIfNotEmpty(original, ToKebobCase);
-        }
-
-        public static string ToSnakeCase(this string original)
-        {
-            return ConvertIfNotEmpty(original, ToLowerSnakeCase);
-        }
 
         private static string ConvertIfNotEmpty(string original, Func<IEnumerable<string>, string> processor)
         {
@@ -53,10 +38,10 @@ namespace EntityFrameworkCore.Convention.Extensions
 
         internal static string ToUpperSnakeCase(IEnumerable<string> words)
         {
-            return string.Join("_", words.Select(word => word.ToLower()));
+            return string.Join("_", words.Select(word => word.ToUpper()));
         }
 
-        internal static bool IsVowel(this char c)
+        private static bool IsVowel(this char c)
         {
             return "aeiouAEIOU".Contains(c);
         }

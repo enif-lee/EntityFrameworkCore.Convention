@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EntityFrameworkCore.Convention
 {
+    /// <summary>
+    ///     Naming convention builder for entity framework core.
+    /// </summary>
     public sealed class ConventionBuilder
     {
         private INamingConvention _columnNamingConvention;
@@ -173,7 +176,6 @@ namespace EntityFrameworkCore.Convention
             foreach (var entity in builder.Model.GetEntityTypes())
             {
                 entity.Relational().TableName = ProcessTableName(entity);
-
 
                 foreach (var prop in entity.GetProperties())
                 {

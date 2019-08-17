@@ -1,8 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace EntityFrameworkCore.Convention
 {
@@ -18,9 +16,7 @@ namespace EntityFrameworkCore.Convention
             var conventionBuilder = new ConventionBuilder();
             configure(conventionBuilder);
             if (!conventionBuilder.Validate(out var message))
-            {
                 throw new ValidationException($"Failed to validate convention builder(cause : {message})");
-            }
             conventionBuilder.Apply(builder);
             return builder;
         }

@@ -1,6 +1,8 @@
+using System;
+
 namespace EntityFrameworkCore.Convention.Attributes
 {
-    public class TableConventionAttribute : System.Attribute, INamingConvention
+    public class TableConventionAttribute : Attribute, INamingConvention
     {
         public string Prefix { get; set; }
 

@@ -7,5 +7,13 @@ namespace EntityFrameworkCore.Convention
         public string Name { get; set; }
 
         public string Suffix { get; set; }
+
+        public static implicit operator NameMeta(string name)
+        {
+            return new NameMeta
+            {
+                Name = name
+            };
+        }
     }
 }

@@ -9,11 +9,20 @@ namespace EntityFrameworkCore.Convention.Extensions
     {
         private static readonly Regex Spliter = new Regex(@"[\s|\-|_]+");
 
-        public static string ToCamelCase(this string original) => ConvertIfNotEmpty(original, ToCamelCase);
+        public static string ToCamelCase(this string original)
+        {
+            return ConvertIfNotEmpty(original, ToCamelCase);
+        }
 
-        public static string ToKebobCase(this string original) => ConvertIfNotEmpty(original, ToKebobCase);
+        public static string ToKebobCase(this string original)
+        {
+            return ConvertIfNotEmpty(original, ToKebobCase);
+        }
 
-        public static string ToSnakeCase(this string original) => ConvertIfNotEmpty(original, ToLowerSnakeCase);
+        public static string ToSnakeCase(this string original)
+        {
+            return ConvertIfNotEmpty(original, ToLowerSnakeCase);
+        }
 
         private static string ConvertIfNotEmpty(string original, Func<IEnumerable<string>, string> processor)
         {

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Reflection;
+using EntityFrameworkCore.Convention.Attributes;
 using EntityFrameworkCore.Convention.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -9,11 +11,13 @@ namespace EntityFrameworkCore.Convention
 {
     public sealed class ConventionBuilder
     {
-        private Func<EntityType, string> _tablePrefix;
-        private Func<EntityType, string> _tableSuffix;
-        private Func<Property, string> _columnPrefix;
         private INamingConvention _columnNamingConvention;
-        private INamingConvention _columnTableNamingConvention;
+        private Func<Property, string> _columnPrefix;
+        private INamingConvention _indexNamingConvention;
+        private INamingConvention _keyNamingConvention;
+        private INamingConvention _tableNamingConvention;
+        private Func<IEntityType, string> _tablePrefix;
+        private Func<IEntityType, string> _tableSuffix;
 
         internal ConventionBuilder()
         {
@@ -43,22 +47,24 @@ namespace EntityFrameworkCore.Convention
 
 
         /// <summary>
-        ///     Setup global table prefix from entity type, but when you use TableAttribute to entity class, this convention will be ignored.
+        ///     Setup global table prefix from entity type, but when you use TableAttribute to entity class, this convention will
+        ///     be ignored.
         /// </summary>
         /// <param name="prefix">Return prefix string from entity type, Don't input split character like -_|whitespace</param>
         /// <returns></returns>
-        public ConventionBuilder UseGlobalTablePrefix(Func<EntityType, string> prefix)
+        public ConventionBuilder UseGlobalTablePrefix(Func<IEntityType, string> prefix)
         {
             _tablePrefix = prefix;
             return this;
         }
 
         /// <summary>
-        ///     Setup global table suffix from entity type, but when you use TableAttribute to entity class, this convention will be ignored.
+        ///     Setup global table suffix from entity type, but when you use TableAttribute to entity class, this convention will
+        ///     be ignored.
         /// </summary>
         /// <param name="suffix">Return suffix string from entity type, Don't input split character like -_|whitespace</param>
         /// <returns></returns>
-        public ConventionBuilder UseGlobalTableSuffix(Func<EntityType, string> suffix)
+        public ConventionBuilder UseGlobalTableSuffix(Func<IEntityType, string> suffix)
         {
             _tableSuffix = suffix;
             return this;
@@ -77,7 +83,7 @@ namespace EntityFrameworkCore.Convention
         }
 
         /// <summary>
-        ///     Setup alphabets of words from entity name global column prefix<br/>
+        ///     Setup alphabets of words from entity name global column prefix<br />
         ///     For example, If entity name is UserDetail, the column prefix is "ud"
         /// </summary>
         /// <param name="alphabetCount"></param>
@@ -112,10 +118,50 @@ namespace EntityFrameworkCore.Convention
         ///     Setup naming strategy how to join words for table name.
         /// </summary>
         /// <param name="convention"></param>
-        /// <returns></returns>s
+        /// <returns></returns>
+        /// s
         public ConventionBuilder UseTableNamingConvention(INamingConvention convention)
         {
-            _columnTableNamingConvention = convention;
+            _tableNamingConvention = convention;
+            return this;
+        }
+
+        /// <summary>
+        ///     Setup naming strategy how to join words for key constraint.
+        /// </summary>
+        /// <param name="convention"></param>
+        /// <returns></returns>
+        /// s
+        public ConventionBuilder UseKeyNamingConvention(INamingConvention convention)
+        {
+            _keyNamingConvention = convention;
+            return this;
+        }
+
+        /// <summary>
+        ///     Setup naming strategy how to join words for index name.
+        /// </summary>
+        /// <param name="convention"></param>
+        /// <returns></returns>
+        /// s
+        public ConventionBuilder UseIndexNamingConvention(INamingConvention convention)
+        {
+            _indexNamingConvention = convention;
+            return this;
+        }
+
+        /// <summary>
+        ///     Setup naming strategy how to join words for all names(table, column, key, index).
+        /// </summary>
+        /// <param name="convention"></param>
+        /// <returns></returns>
+        /// s
+        public ConventionBuilder UseNamingConvention(INamingConvention convention)
+        {
+            _tableNamingConvention = convention;
+            _columnNamingConvention = convention;
+            _indexNamingConvention = convention;
+            _keyNamingConvention = convention;
             return this;
         }
 
@@ -138,13 +184,10 @@ namespace EntityFrameworkCore.Convention
                 }
 
                 foreach (var key in entity.GetKeys())
-                {
-                }
+                    key.Relational().Name = _keyNamingConvention.Convert(key.Relational().Name);
 
                 foreach (var index in entity.GetIndexes())
-                {
-
-                }
+                    index.Relational().Name = _keyNamingConvention.Convert(index.Relational().Name);
             }
         }
 
@@ -157,20 +200,49 @@ namespace EntityFrameworkCore.Convention
                 columnName = columnName == null ? propName : propName + "_" + columnName;
                 propName = propOwner.DefiningNavigationName;
                 propOwner = propOwner.DefiningEntityType;
-            }
-            while (propName != null);
+            } while (propName != null);
 
-            throw new NotImplementedException();
+            var convention = prop.PropertyInfo.GetCustomAttribute<ColumnConventionAttribute>()
+                             ?? prop.DeclaringEntityType.ClrType.GetCustomAttribute<ColumnConventionAttribute>();
+
+
+            return _columnNamingConvention.Convert(new NameMeta
+            {
+                Prefix = convention?.Prefix ?? _columnPrefix?.Invoke(prop.AsProperty()),
+                Name = prop.PropertyInfo.Name,
+                Suffix = convention?.Suffix ?? string.Empty
+            });
         }
 
-        private string ProcessTableName(IMutableEntityType relational)
+        private string ProcessTableName(IEntityType relational)
         {
-            throw new NotImplementedException();
+            var convention = relational.ClrType.GetCustomAttribute<TableConventionAttribute>();
+
+            return _tableNamingConvention.Convert(new NameMeta
+            {
+                Prefix = convention.Prefix ?? _tablePrefix?.Invoke(relational) ?? string.Empty,
+                Suffix = convention.Suffix ?? _tableSuffix?.Invoke(relational) ?? string.Empty,
+                Name = relational.Name
+            });
         }
 
         public bool Validate(out string message)
         {
-            throw new NotImplementedException();
+            message = default;
+
+            if (_tableNamingConvention == null)
+                message = "Table naming convention is not defined. Please call use UseTableNamingConvention";
+
+            if (_columnNamingConvention == null)
+                message = "Column naming convention is not defined. Please call use UseTableNamingConvention";
+
+            if (_keyNamingConvention == null)
+                message = "Key naming convention is not defined. Please call use UseKeyNamingConvention";
+
+            if (_indexNamingConvention == null)
+                message = "Index naming convention is not defined. Please call use UseIndexNamingConvention";
+
+            return message == default;
         }
     }
 }

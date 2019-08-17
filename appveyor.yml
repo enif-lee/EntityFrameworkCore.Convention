@@ -19,7 +19,7 @@ build_script:
 after_build:
 # For once the build has completed
 artifacts:
-  - path: '\EntityFrameworkCore.Convention\bin\Debug\netcoreapp2.2\publish'
+  - path: 'EntityFrameworkCore.Convention\bin\Debug\netstandard2.0\publish'
     name: dll
     type: zip
 clone_depth: 1

@@ -9,6 +9,7 @@ ProjectSection(SolutionItems) = preProject
 	README.md = README.md
 	.gitignore = .gitignore
 	appveyor.yml = appveyor.yml
+	.editorconfig = .editorconfig
 EndProjectSection
 EndProject
 Global

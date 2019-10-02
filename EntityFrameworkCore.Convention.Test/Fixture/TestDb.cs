@@ -9,6 +9,14 @@ namespace EntityFrameworkCore.Convention.Test.Fixture
     public class TestDb : DbContext
     {
         public DbSet<TestEntity> TestEntities { get; set; }
+
+
+	        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	        {
+		        base.OnConfiguring(optionsBuilder);
+
+	        }
+
         public override int SaveChanges()
         {
 	        ChangeTracker
@@ -21,6 +29,11 @@ namespace EntityFrameworkCore.Convention.Test.Fixture
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
+	        ChangeTracker
+		        .UpdateCreatedAtFields()
+		        .UpdateUpdatedAtEntities()
+		        .UpdateStateEntities();
+
 	        return base.SaveChangesAsync(cancellationToken);
         }
     }

@@ -74,12 +74,12 @@ namespace EntityFrameworkCore.Convention
         }
 
         /// <summary>
-        ///     Setup global column suffix converter from Property type, but when you declare ColumnPrefixAttribute to
+        ///     Setup global column prefix converter from Property type, but when you declare ColumnPrefixAttribute to
         ///     entity class, this convention will be ignored.
         /// </summary>
         /// <param name="columnPrefix"></param>
         /// <returns></returns>
-        public ConventionBuilder UseGlobalColumnSuffix(Func<Property, string> columnPrefix)
+        public ConventionBuilder UseGlobalColumnPrefix(Func<Property, string> columnPrefix)
         {
             _columnPrefix = columnPrefix;
             return this;
@@ -91,12 +91,12 @@ namespace EntityFrameworkCore.Convention
         /// </summary>
         /// <param name="alphabetCount"></param>
         /// <returns></returns>
-        public ConventionBuilder UseGlobalColumnSuffixAsAlphabetOfEachWordsFromEntityName(int alphabetCount)
+        public ConventionBuilder UseGlobalColumnPrefixAsAlphabetOfEachWordsFromEntityName(int alphabetCount)
         {
-            UseGlobalColumnSuffix(property =>
+            UseGlobalColumnPrefix(property =>
             {
                 var chars = property
-                    .DeclaringEntityType
+	                .DeclaringEntityType
                     .Name
                     .IgnoreLowercase()
                     .Take(alphabetCount)

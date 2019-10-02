@@ -13,7 +13,8 @@ This is a library that collects frequently used / implemented functions as below
 - [ ] Global Table Default Schema
 - [ ] Global Table Prefix/Suffix
 - [ ] Global/Table Scope Column Prefix/Suffix
-- [ ] Column Naming Convention { built in kebob, snake, camel, Pascal }
+- [ ] Configure Specific Table Naming Convention
+- [ ] Configure Specific Column Naming Convention { built in kebob, snake, camel, Pascal }
 
 ```csharp
 optionsBuilder
@@ -38,14 +39,19 @@ public class UserHistory
 
 #### BaseEntity
 
-- [ ] Provide CreateAt, UpdateAt Interface
-- [ ] Provide Creator, Updater Interface
+- [ ] Provide ICreateAt, IUpdateAt Interface
+- [ ] Provide ICreator, IUpdater Interface
 
 ```csharp
 optionsBuilder
     .UseAutoUpdateDateTime()
     .UseAutoUpdateAuthor(() => Http.Context.Session['userId'])
 ;
+
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    optionsBuilder.UseEnumConversion<UserStatus>();
+}
 
 // Entity Class
 public class Something : ICreateAt, IUpdateAt, ICreator
@@ -59,7 +65,6 @@ public class Something : ICreateAt, IUpdateAt, ICreator
 - [ ] Provide Enum with attribute conversion helper
 
 ```csharp
-[Conversion]
 public enum UserStatus
 {
     [Value("BL")] Blocked,
@@ -72,16 +77,20 @@ public enum UserStatus
 public DatabaseContext : ConventionDbContext
 {
     public DbSet<User> Users { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseEnumConversion<UserStatus>();
+    }
 }
-
-// Startup.cs
-
-optionsBuilder
-    .UseInMemoryDatabase()
-    .UseEnumConversion();
 ```
 
-### Contribute Guide
+### Table Audit
+
+- [ ] Track and store changes of row for specific assigned tables.
+- [ ] Configure tracking strategy for each table. 
+
+### Contribution Guide
 
 First of all, We need to conversation through issue or PR about some your great idea.
 

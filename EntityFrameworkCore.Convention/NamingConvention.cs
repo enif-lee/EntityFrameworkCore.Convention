@@ -11,9 +11,13 @@ namespace EntityFrameworkCore.Convention
         private static readonly Regex Spliter = new Regex(@"[\s|\-|_]+");
 
         public static NamingConvention CamelCase = new NamingConvention(StringHelper.ToCamelCase);
+
         public static NamingConvention LowerSnakeCase = new NamingConvention(StringHelper.ToLowerSnakeCase);
+
         public static NamingConvention UpperSnakeCase = new NamingConvention(StringHelper.ToUpperSnakeCase);
+
         public static NamingConvention PascalCase = new NamingConvention(StringHelper.ToPascalCase);
+
         private readonly Func<string[], string> _joiner;
 
         internal NamingConvention(Func<string[], string> joiner)

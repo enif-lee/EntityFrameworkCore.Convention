@@ -175,21 +175,21 @@ namespace EntityFrameworkCore.Convention
         {
             foreach (var entity in builder.Model.GetEntityTypes())
             {
-                entity.Relational().TableName = ProcessTableName(entity);
+                entity.SetTableName(ProcessTableName(entity));
 
                 foreach (var prop in entity.GetProperties())
                 {
                     if (entity.IsOwned() && prop.IsPrimaryKey())
                         continue;
 
-                    prop.Relational().ColumnName = ProcessColumnName(prop);
+                    prop.SetColumnName(ProcessColumnName(prop));
                 }
 
                 foreach (var key in entity.GetKeys())
-                    key.Relational().Name = _keyNamingConvention.Convert(key.Relational().Name);
+                    key.SetName(_keyNamingConvention.Convert(key.GetName()));
 
                 foreach (var index in entity.GetIndexes())
-                    index.Relational().Name = _keyNamingConvention.Convert(index.Relational().Name);
+                    index.SetName(_keyNamingConvention.Convert(index.GetName()));
             }
         }
 

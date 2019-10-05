@@ -10,6 +10,8 @@ namespace EntityFrameworkCore.Convention
     {
         private static readonly Regex Spliter = new Regex(@"[\s|\-|_]+");
 
+        internal static readonly NamingConvention ForwardCase = new NamingConvention(words => string.Join("", words));
+
         public static NamingConvention CamelCase = new NamingConvention(StringHelper.ToCamelCase);
 
         public static NamingConvention LowerSnakeCase = new NamingConvention(StringHelper.ToLowerSnakeCase);
@@ -32,11 +34,13 @@ namespace EntityFrameworkCore.Convention
 
         private static IEnumerable<string> SplitAsWords(NameMeta nameMeta)
         {
-            yield return nameMeta.Prefix;
+	        if (!string.IsNullOrEmpty(nameMeta.Prefix))
+				yield return nameMeta.Prefix;
 
             foreach (var word in Spliter.Split(nameMeta.Name)) yield return word;
 
-            yield return nameMeta.Suffix;
+            if (!string.IsNullOrEmpty(nameMeta.Suffix))
+				yield return nameMeta.Suffix;
         }
     }
 }

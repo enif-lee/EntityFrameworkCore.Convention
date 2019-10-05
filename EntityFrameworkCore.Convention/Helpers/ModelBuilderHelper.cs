@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -28,10 +27,7 @@ namespace EntityFrameworkCore.Convention.Helpers
 		{
 			var conventionBuilder = new ConventionBuilder();
 			configure(conventionBuilder);
-			
-			if (!conventionBuilder.Validate(out var message))
-				throw new ValidationException($"Failed to validate convention builder(cause : {message})");
-			
+
 			conventionBuilder.Apply(builder);
 			return builder;
 		}

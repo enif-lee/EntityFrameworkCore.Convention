@@ -10,13 +10,6 @@ namespace EntityFrameworkCore.Convention.Test.Fixture
     {
         public DbSet<TestEntity> TestEntities { get; set; }
 
-
-	        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	        {
-		        base.OnConfiguring(optionsBuilder);
-
-	        }
-
         public override int SaveChanges()
         {
 	        ChangeTracker

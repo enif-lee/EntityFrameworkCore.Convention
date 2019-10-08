@@ -7,13 +7,14 @@ namespace EntityFrameworkCore.Convention.Helpers
 {
     public static class StringHelper
     {
-        private static readonly Regex Spliter = new Regex(@"[\s|\-|_]+");
+        private static readonly Regex Splitter = new Regex(@"[\s|\-|_]+");
 
-        private static string ConvertIfNotEmpty(string original, Func<IEnumerable<string>, string> processor)
+        public static IEnumerable<string> SplitWords(string original)
         {
-            return string.IsNullOrEmpty(original?.Trim())
-                ? string.Empty
-                : processor(Spliter.Split(original));
+	        var trimmed = original?.Trim();
+	        return string.IsNullOrEmpty(trimmed)
+                ? Enumerable.Empty<string>()
+                : Splitter.Split(Regex.Replace(trimmed, @"([a-z0-9])([A-Z])", "$1_$2").ToLower());
         }
 
         internal static string ToCamelCase(IEnumerable<string> words)

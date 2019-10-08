@@ -208,6 +208,15 @@ namespace EntityFrameworkCore.Convention
 		private string ProcessColumnName(IMutableProperty prop)
 		{
 			IEntityType propOwner = prop.DeclaringEntityType;
+//
+//			string GetColumnName(IEntityType entityType)
+//			{
+//				return entityType.DefiningEntityType != null
+//					? GetColumnName(entityType.DefiningEntityType) + entityType.DefiningNavigationName
+//					: entityType.DefiningNavigationName;
+//			}
+
+
 			string propName = prop.Name, columnName = null;
 			do
 			{
@@ -223,7 +232,7 @@ namespace EntityFrameworkCore.Convention
 			return ColumnNamingConvention.Convert(new NameMeta
 			{
 				Prefix = convention?.Prefix ?? _columnPrefix?.Invoke(prop.AsProperty()),
-				Name = prop.PropertyInfo.Name,
+				Name = columnName,
 				Suffix = convention?.Suffix ?? string.Empty
 			});
 		}
@@ -236,7 +245,7 @@ namespace EntityFrameworkCore.Convention
 			{
 				Prefix = convention?.Prefix ?? _tablePrefix?.Invoke(relational) ?? string.Empty,
 				Suffix = convention?.Suffix ?? _tableSuffix?.Invoke(relational) ?? string.Empty,
-				Name = TableNamingConvention?.Convert(relational.Name) ?? relational.Name
+				Name = TableNamingConvention?.Convert(relational.GetTableName()) ?? relational.GetTableName()
 			});
 		}
 

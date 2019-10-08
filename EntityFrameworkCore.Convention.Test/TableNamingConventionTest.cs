@@ -9,9 +9,9 @@ namespace EntityFrameworkCore.Convention.Test
 {
 	public class TableNamingConventionTest
 	{
-		private DbContextOptions<TestDb> _options;
+		private DbContextOptions _options;
 
-		public class TestDb : DbContext
+		private class TestDb : DbContext
 		{
 			public TestDb(DbContextOptions options) : base(options)
 			{
@@ -30,14 +30,13 @@ namespace EntityFrameworkCore.Convention.Test
 		{
 			var connection = new SqliteConnection("Data Source=:memory:");
 			connection.Open();
-			_options = new DbContextOptionsBuilder<TestDb>()
+			_options = new DbContextOptionsBuilder()
 				.UseSqlite(connection)
 				.Options;
 		}
 
-
 		[Test]
-		public void Test()
+		public void Test2()
 		{
 			// Given
 			var testDb = new TestDb(_options);
@@ -46,7 +45,7 @@ namespace EntityFrameworkCore.Convention.Test
 			var model = testDb.Model.FindEntityType(typeof(TestEntity));
 
 			// Then
-			model.GetTableName().Should().Be("test_entity");
+			model.GetTableName().Should().Be("test_entities");
 		}
 	}
 }

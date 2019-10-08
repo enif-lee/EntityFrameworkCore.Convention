@@ -24,7 +24,7 @@ namespace EntityFrameworkCore.Convention
 
         internal NamingConvention(Func<string[], string> joiner)
         {
-            _joiner = joiner;
+            _joiner = words => joiner(words.SelectMany(StringHelper.SplitWords).ToArray());
         }
 
         public string Convert(NameMeta nameMeta)

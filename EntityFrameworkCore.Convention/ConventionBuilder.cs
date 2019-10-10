@@ -97,6 +97,18 @@ namespace EntityFrameworkCore.Convention
 		}
 
 		/// <summary>
+		///     Setup global column prefix string, but when you declare ColumnPrefixAttribute to
+		///     entity class, this convention will be ignored.
+		/// </summary>
+		/// <param name="columnPrefix">The word will be set as column prefix</param>
+		/// <returns></returns>
+		public ConventionBuilder UseGlobalColumnPrefix(string columnPrefix)
+		{
+			_columnPrefix = _ => columnPrefix;
+			return this;
+		}
+
+		/// <summary>
 		///     Setup alphabets of words from entity name global column prefix<br />
 		///     For example, If entity name is UserDetail, the column prefix is "ud"
 		/// </summary>
@@ -186,7 +198,8 @@ namespace EntityFrameworkCore.Convention
 		{
 			foreach (var entity in builder.Model.GetEntityTypes())
 			{
-				entity.SetTableName(ProcessTableName(entity));
+				if (!entity.IsOwned())
+					entity.SetTableName(ProcessTableName(entity));
 
 				foreach (var prop in entity.GetProperties())
 				{
@@ -234,8 +247,8 @@ namespace EntityFrameworkCore.Convention
 			return TableNamingConvention.Convert(new NameMeta
 			{
 				Prefix = convention?.Prefix ?? _tablePrefix?.Invoke(relational) ?? string.Empty,
-				Suffix = convention?.Suffix ?? _tableSuffix?.Invoke(relational) ?? string.Empty,
-				Name = TableNamingConvention?.Convert(relational.GetTableName()) ?? relational.GetTableName()
+				Name =  relational.GetTableName(),
+				Suffix = convention?.Suffix ?? _tableSuffix?.Invoke(relational) ?? string.Empty
 			});
 		}
 

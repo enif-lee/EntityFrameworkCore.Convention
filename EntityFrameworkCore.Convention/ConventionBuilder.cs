@@ -207,32 +207,22 @@ namespace EntityFrameworkCore.Convention
 
 		private string ProcessColumnName(IMutableProperty prop)
 		{
-			IEntityType propOwner = prop.DeclaringEntityType;
-//
-//			string GetColumnName(IEntityType entityType)
-//			{
-//				return entityType.DefiningEntityType != null
-//					? GetColumnName(entityType.DefiningEntityType) + entityType.DefiningNavigationName
-//					: entityType.DefiningNavigationName;
-//			}
-
-
-			string propName = prop.Name, columnName = null;
-			do
+			string GetName(IEntityType currentType, string currentName)
 			{
-				columnName = columnName == null ? propName : propName + "_" + columnName;
-				propName = propOwner.DefiningNavigationName;
-				propOwner = propOwner.DefiningEntityType;
-			} while (propName != null);
+				var hasParentType = currentType.DefiningEntityType != null;
+				return hasParentType
+					? GetName(currentType.DefiningEntityType, currentType.DefiningNavigationName) + "_" + currentName
+					: currentName;
+			}
 
 			var convention = prop.PropertyInfo.GetCustomAttribute<ColumnConventionAttribute>()
 			                 ?? prop.DeclaringEntityType.ClrType.GetCustomAttribute<ColumnConventionAttribute>();
 
-
+			var name = GetName(prop.DeclaringEntityType, prop.Name);
 			return ColumnNamingConvention.Convert(new NameMeta
 			{
 				Prefix = convention?.Prefix ?? _columnPrefix?.Invoke(prop.AsProperty()),
-				Name = columnName,
+				Name = name,
 				Suffix = convention?.Suffix ?? string.Empty
 			});
 		}

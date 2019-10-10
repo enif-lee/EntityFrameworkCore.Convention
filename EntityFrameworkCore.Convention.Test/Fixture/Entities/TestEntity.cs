@@ -17,6 +17,8 @@ namespace EntityFrameworkCore.Convention.Test.Fixture.Entities
 
         public OwnedEntity OwnedB { get; set; }
 
-        public NestedOwnedEntity NestedField { get; set; }
+        public NestedOwnedEntity NestedFieldA { get; set; }
+
+        public NestedOwnedEntity NestedFieldB { get; set; }
     }
 }

@@ -1,33 +1,24 @@
-using System.Threading;
-using System.Threading.Tasks;
+using System;
 using EntityFrameworkCore.Convention.Helpers;
 using EntityFrameworkCore.Convention.Test.Fixture.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkCore.Convention.Test.Fixture
 {
-    public class TestDb : DbContext
-    {
-        public DbSet<TestEntity> TestEntities { get; set; }
+	internal class TestDb : DbContext
+	{
+		private readonly Action<ConventionBuilder> _builder;
 
-        public override int SaveChanges()
-        {
-	        ChangeTracker
-		        .UpdateCreatedAtFields()
-		        .UpdateUpdatedAtEntities()
-		        .UpdateStateEntities();
+		public TestDb(DbContextOptions options, Action<ConventionBuilder> builder) : base(options)
+		{
+			_builder = builder;
+		}
 
-	        return base.SaveChanges();
-        }
+		public DbSet<TestEntity> TestEntities { get; set; }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-	        ChangeTracker
-		        .UpdateCreatedAtFields()
-		        .UpdateUpdatedAtEntities()
-		        .UpdateStateEntities();
-
-	        return base.SaveChangesAsync(cancellationToken);
-        }
-    }
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.UseNamingConvention(builder => _builder?.Invoke(builder));
+		}
+	}
 }

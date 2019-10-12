@@ -20,7 +20,7 @@ namespace EntityFrameworkCore.Convention.Test
 		{
 			var provider = new ServiceCollection()
 				.AddEntityFrameworkSqlite()
-				.Replace(ServiceDescriptor.Singleton<IModelSource, TestModelSource>())
+				.Replace(ServiceDescriptor.Singleton<IModelSource, UncachedModelSource>())
 				.BuildServiceProvider();
 
 			var connection = new SqliteConnection("Data Source=:memory:");

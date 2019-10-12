@@ -16,16 +16,16 @@ namespace EntityFrameworkCore.Convention
 	public sealed class ConventionBuilder
 	{
 		[field: NotNull]
-		private INamingConvention ColumnNamingConvention { get; set; } = NamingConvention.ForwardCase;
+		private INamingConvention ColumnNamingConvention { get; set; } = NamingConvention.PascalCase;
 
 		[field: NotNull]
-		private INamingConvention IndexNamingConvention { get; set; } = NamingConvention.ForwardCase;
+		private INamingConvention IndexNamingConvention { get; set; } = NamingConvention.PascalCase;
 
 		[field: NotNull]
-		private INamingConvention KeyNamingConvention { get; set; } = NamingConvention.ForwardCase;
+		private INamingConvention KeyNamingConvention { get; set; } = NamingConvention.PascalCase;
 
 		[field: NotNull]
-		private INamingConvention TableNamingConvention { get; set; } = NamingConvention.ForwardCase;
+		private INamingConvention TableNamingConvention { get; set; } = NamingConvention.PascalCase;
 
 		private Func<Property, string> _columnPrefix;
 
@@ -120,6 +120,7 @@ namespace EntityFrameworkCore.Convention
 			{
 				var chars = property
 					.DeclaringEntityType
+					.ClrType
 					.Name
 					.IgnoreLowercase()
 					.Take(alphabetCount)

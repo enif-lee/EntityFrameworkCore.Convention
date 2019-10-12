@@ -1,9 +1,13 @@
 using System.Linq;
 using EntityFrameworkCore.Convention.Test.Fixture;
 using EntityFrameworkCore.Convention.Test.Fixture.Entities;
+using EntityFrameworkCore.Convention.Test.Infrastructure;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using NUnit.Framework;
 
 namespace EntityFrameworkCore.Convention.Test
@@ -14,10 +18,16 @@ namespace EntityFrameworkCore.Convention.Test
 
 		public TableNamingConventionTest()
 		{
+			var provider = new ServiceCollection()
+				.AddEntityFrameworkSqlite()
+				.Replace(ServiceDescriptor.Singleton<IModelSource, TestModelSource>())
+				.BuildServiceProvider();
+
 			var connection = new SqliteConnection("Data Source=:memory:");
 			connection.Open();
 			_options = new DbContextOptionsBuilder()
 				.UseSqlite(connection)
+				.UseInternalServiceProvider(provider)
 				.Options;
 		}
 
@@ -25,7 +35,7 @@ namespace EntityFrameworkCore.Convention.Test
 		public void UseTableNamingConvention_Should_ApplyNamingConventionForTableName_When_ParticularNamingConventionIsSpecified()
 		{
 			// Given
-			var testDb = new TestDb(_options, builder => builder
+			using var testDb = new TestDb(_options, builder => builder
 				.UseTableNamingConvention(NamingConvention.LowerSnakeCase));
 
 			// When
@@ -39,7 +49,7 @@ namespace EntityFrameworkCore.Convention.Test
 		public void UseColumnNamingConvention_Should_ApplyNamingConventionForTableNameForNestedOwnedType_When_ParticularNamingConventionIsSpecified()
 		{
 			// Given
-			var db = new TestDb(_options, builder => builder.UseColumnNamingConvention(NamingConvention.LowerSnakeCase));
+			using var db = new TestDb(_options, builder => builder.UseColumnNamingConvention(NamingConvention.LowerSnakeCase));
 
 			// When
 			var model = db.Model.FindEntityType(typeof(TestEntity));
@@ -59,7 +69,7 @@ namespace EntityFrameworkCore.Convention.Test
 		public void UseGlobalTablePrefix_Should_AttachPrefixToTableName_When_GlobalTablePrefixIsConfigured()
 		{
 			// Given
-			var db = new TestDb(_options, builder => builder
+			using var db = new TestDb(_options, builder => builder
 				.UseTableNamingConvention(NamingConvention.LowerSnakeCase)
 				.UseGlobalTablePrefix("Cvtn"));
 
@@ -74,7 +84,7 @@ namespace EntityFrameworkCore.Convention.Test
 		public void UseGlobalTableSuffix_Should_AttachSuffixToTableName_When_GlobalTableSuffixIsConfigured()
 		{
 			// Given
-			var db = new TestDb(_options, builder => builder
+			using var db = new TestDb(_options, builder => builder
 				.UseTableNamingConvention(NamingConvention.LowerSnakeCase)
 				.UseGlobalTableSuffix("tbl"));
 
@@ -89,17 +99,59 @@ namespace EntityFrameworkCore.Convention.Test
 		[Test]
 		public void UseGlobalColumnPrefix_Should_AttachPrefixToColumnName_When_GlobalColumnPrefixIsConfigured()
 		{
-			// Todo setup test code.
 			// Given
-			var db = new TestDb(_options, builder => builder
-				.UseTableNamingConvention(NamingConvention.LowerSnakeCase)
+			using var db = new TestDb(_options, builder => builder
 				.UseGlobalColumnPrefix("c"));
+
+			// Then
+			var model = db.Model.FindEntityType(typeof(TestEntity));
+			var columnName = model.GetProperties().First().GetColumnName();
+
+			// Then
+			columnName.Should().StartWith("C");
+		}
+
+		[Test]
+		public void UseGlobalColumnPrefixAsAlphabetOfEachWordsFromEntityName_Should_AttachPrefixToColumnName_When_SetupIsConfigured()
+		{
+			// Given
+			using var db = new TestDb(_options, builder => builder
+				.UseGlobalColumnPrefixAsAlphabetOfEachWordsFromEntityName(2));
+
+			// Then
+			var model = db.Model.FindEntityType(typeof(TestEntity));
+			var columnName = model.GetProperties().First().GetColumnName();
+
+			// Then
+			columnName.Should().StartWith("Te");
+		}
+
+		[Test]
+		public void UseGlobalTablePrefix_Should_AttachPrefixToColumnNameFromEntityType()
+		{
+			// Given
+			using var db = new TestDb(_options, builder => builder
+				.UseGlobalTablePrefix(type => new string(type.ClrType.Name.Take(3).ToArray())));
 
 			// Then
 			var model = db.Model.FindEntityType(typeof(TestEntity));
 
 			// Then
-			model.GetTableName().Should().EndWith("_tbl");
+			model.GetTableName().Should().StartWith("TesTestEntities");
+		}
+
+		[Test]
+		public void UseGlobalTableSuffix_Should_AttachSuffixToColumnNameFromEntityType()
+		{
+			// Given
+			using var db = new TestDb(_options, builder => builder
+				.UseGlobalTableSuffix(type => new string(type.ClrType.Name.Take(3).ToArray())));
+
+			// Then
+			var model = db.Model.FindEntityType(typeof(TestEntity));
+
+			// Then
+			model.GetTableName().Should().StartWith("TestEntitiesTes");
 		}
 	}
 }

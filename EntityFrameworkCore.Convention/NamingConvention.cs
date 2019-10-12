@@ -10,8 +10,6 @@ namespace EntityFrameworkCore.Convention
     {
         private static readonly Regex Spliter = new Regex(@"[\s|\-|_]+");
 
-        internal static readonly NamingConvention ForwardCase = new NamingConvention(words => string.Join("", words));
-
         public static NamingConvention CamelCase = new NamingConvention(StringHelper.ToCamelCase);
 
         public static NamingConvention LowerSnakeCase = new NamingConvention(StringHelper.ToLowerSnakeCase);

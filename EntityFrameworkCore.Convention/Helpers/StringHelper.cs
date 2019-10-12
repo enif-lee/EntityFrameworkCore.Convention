@@ -54,7 +54,7 @@ namespace EntityFrameworkCore.Convention.Helpers
 
         internal static string IgnoreLowercase(this string str)
         {
-            return new string(str.Where(char.IsLower).ToArray());
+            return new string(str.Where(char.IsUpper).ToArray());
         }
     }
 }

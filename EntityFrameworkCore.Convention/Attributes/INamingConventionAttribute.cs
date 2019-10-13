@@ -1,6 +1,6 @@
 namespace EntityFrameworkCore.Convention.Attributes
 {
-    public interface INamingConvention
+    public interface INamingConventionAttribute
     {
         string Prefix { get; set; }
 

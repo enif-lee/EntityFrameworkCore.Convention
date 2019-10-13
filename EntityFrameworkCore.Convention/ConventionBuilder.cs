@@ -193,7 +193,7 @@ namespace EntityFrameworkCore.Convention
 		}
 
 		/// <summary>
-		///     Apply
+		/// 
 		/// </summary>
 		internal void Apply(ModelBuilder builder)
 		{
@@ -215,7 +215,7 @@ namespace EntityFrameworkCore.Convention
 
 
 				foreach (var index in entity.GetIndexes())
-						index.SetName(IndexNamingConvention.Convert(index.GetName()));
+					index.SetName(IndexNamingConvention.Convert(index.GetName()));
 			}
 		}
 

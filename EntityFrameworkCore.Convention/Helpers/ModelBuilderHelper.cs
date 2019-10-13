@@ -54,20 +54,20 @@ namespace EntityFrameworkCore.Convention.Helpers
 			return tracker;
 		}
 
-		public static ChangeTracker UpdateUpdatedAtEntities(this ChangeTracker tracker)
+		public static ChangeTracker UpdateUpdatedAtFields(this ChangeTracker tracker)
 		{
-			return tracker.UpdateUpdatedAtEntities(DateTime.UtcNow);
+			return tracker.UpdateUpdatedAtFields(DateTime.UtcNow);
 		}
 
-		public static ChangeTracker UpdateUpdatedAtEntities(this ChangeTracker tracker, DateTime now)
+		public static ChangeTracker UpdateUpdatedAtFields(this ChangeTracker tracker, DateTime now)
 		{
-			foreach (var entry in tracker.Entries<IUpdatedAt>().Where(e => e.State == EntityState.Modified))
+			foreach (var entry in tracker.Entries<IUpdatedAt>().Where(e => e.State == EntityState.Modified || e.State == EntityState.Added))
 				entry.Entity.UpdatedAt = now;
 
 			return tracker;
 		}
 
-		public static ChangeTracker UpdateStateEntities(this ChangeTracker tracker)
+		public static ChangeTracker UpdateStateFields(this ChangeTracker tracker)
 		{
 			foreach (var entry in tracker.Entries<IState>().Where(e => StateMap.ContainsKey(e.State)))
 			{

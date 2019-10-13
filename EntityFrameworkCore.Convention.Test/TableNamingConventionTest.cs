@@ -16,6 +16,16 @@ namespace EntityFrameworkCore.Convention.Test
 	{
 		private readonly DbContextOptions _options;
 
+		public class NormalTestDb : DbContext
+		{
+			public NormalTestDb(DbContextOptions options) : base(options)
+			{
+			}
+
+			public DbSet<TestEntity> TestEntities { get; set; }
+
+		}
+
 		public TableNamingConventionTest()
 		{
 			var provider = new ServiceCollection()
@@ -153,5 +163,7 @@ namespace EntityFrameworkCore.Convention.Test
 			// Then
 			model.GetTableName().Should().StartWith("TestEntitiesTes");
 		}
+		
+		// Todo add attributes tests 
 	}
 }

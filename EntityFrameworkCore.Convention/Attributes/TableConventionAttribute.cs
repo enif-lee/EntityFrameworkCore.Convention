@@ -2,7 +2,7 @@ using System;
 
 namespace EntityFrameworkCore.Convention.Attributes
 {
-    public class TableConventionAttribute : Attribute, INamingConvention
+    public class TableConventionAttribute : Attribute, INamingConventionAttribute
     {
         public string Prefix { get; set; }
 

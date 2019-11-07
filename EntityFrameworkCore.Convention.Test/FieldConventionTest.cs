@@ -14,18 +14,15 @@ namespace EntityFrameworkCore.Convention.Test
 {
 	public class FieldConventionTest : IDisposable
 	{
-		private DbContextOptions _options;
-		private FieldTestDb _db;
+		private readonly FieldTestDb _db;
 
 		public FieldConventionTest()
 		{
 			var connection = new SqliteConnection("Data Source=:memory:");
 			connection.Open();
-			_options = new DbContextOptionsBuilder()
+			_db = new FieldTestDb(new DbContextOptionsBuilder()
 				.UseSqlite(connection)
-				.Options;
-			
-			_db = new FieldTestDb(_options);
+				.Options);
 			_db.Database.EnsureCreated();
 		}
 

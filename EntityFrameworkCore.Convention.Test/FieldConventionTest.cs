@@ -6,22 +6,30 @@ using EntityFrameworkCore.Convention.Test.Infrastructure;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NUnit.Framework;
 
 namespace EntityFrameworkCore.Convention.Test
 {
 	public class FieldConventionTest : IDisposable
 	{
-		private readonly FieldTestDb _db;
+		private FieldTestDb _db;
 
 		public FieldConventionTest()
 		{
+			_db = CreateTestDb();
+		}
+
+		private FieldTestDb CreateTestDb(Action<ChangeTracker> changeTrack = null, Action<ModelBuilder> modelBuilder = null)
+		{
 			var connection = new SqliteConnection("Data Source=:memory:");
 			connection.Open();
-			_db = new FieldTestDb(new DbContextOptionsBuilder()
+			var options = new DbContextOptionsBuilder()
 				.UseSqlite(connection)
-				.Options);
-			_db.Database.EnsureCreated();
+				.Options;
+			var db = new FieldTestDb(options, changeTrack, modelBuilder);
+			db.Database.EnsureCreated();
+			return db;
 		}
 
 		[Test]
@@ -127,8 +135,26 @@ namespace EntityFrameworkCore.Convention.Test
 			entity.State.Should().Be(State.Deleted);
 		}
 
-		public void Dispose()
+		[Test]
+		public async Task UpdateStateEntities_Should_BeIgnoredDeletedEntitiesByDefault_EntityIsDeleted()
+		{
+			// Given
+			var db = CreateTestDb(c => c.UpdateStateFields(), b => b.ApplyIgnoreDeletedStateEntitiesFromQuery());
 
+			// When
+			var entity = new FieldTestEntity();
+			db.Entities.Add(entity);
+			await db.SaveChangesAsync();
+
+			db.Entities.Remove(entity);
+			await db.SaveChangesAsync();
+
+			// Then
+			var count = await db.Entities.CountAsync();
+			count.Should().Be(0);
+		}
+
+		public void Dispose()
 		{
 			_db?.Dispose();
 		}

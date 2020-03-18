@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace EntityFrameworkCore.Convention.Entity
+namespace EntityFrameworkCore.Convention.Audit
 {
 	public class Audit
 	{
@@ -18,7 +18,7 @@ namespace EntityFrameworkCore.Convention.Entity
 		public string Snapshot { get; set; }
 
 		[Required]
-		public State Event { get; set; }
+		public string Event { get; set; }
 
 		[Required]
 		public DateTime LoggedAt { get; set; }

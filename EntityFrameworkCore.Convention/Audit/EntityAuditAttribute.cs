@@ -8,6 +8,10 @@ namespace EntityFrameworkCore.Convention.Audit
 	{
 		private readonly EntityState[] _states;
 
+		/// <summary>
+		/// 	Entity audit logging attribute
+		/// </summary>
+		/// <param name="states">Event types for audit logging, Added, Modified, Deleted be contain as default.</param>
 		public EntityAuditAttribute(params EntityState[] states)
 		{
 			_states = states.Length == 0

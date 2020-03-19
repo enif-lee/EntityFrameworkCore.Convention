@@ -18,17 +18,9 @@ namespace EntityFrameworkCore.Convention.Audit
 			[EntityState.Deleted] = State.Deleted
 		};
 
-		public static void ApplyAuditLogging<TDbContext>(this ChangeTracker context) where TDbContext : DbContext
+		public static IEnumerable<Audit> GetAudits<TDbContext>(this ChangeTracker context) where TDbContext : DbContext
 		{
-			var audits = AsAudits<TDbContext>(context
-					.Entries()
-					.Where(e => e.State != EntityState.Unchanged && e.State != EntityState.Detached))
-				.ToList();
-		}
-
-		private static IEnumerable<Audit> AsAudits<TDbContext>(IEnumerable<EntityEntry> tracks) where TDbContext : DbContext
-		{
-			foreach (var entity in tracks)
+			foreach (var entity in context.Entries())
 			{
 				if (TryGetAuditInfo<DbContext>(entity, out var table))
 					continue;
@@ -43,7 +35,7 @@ namespace EntityFrameworkCore.Convention.Audit
 					Table = table,
 					Key = JsonSerializer.Serialize(keys),
 					Snapshot = JsonSerializer.Serialize(entity.Entity),
-					Event = AuditCache<TDbContext>.EventValueResolver.Convert(entity.State),
+					Event = EntityFrameworkAuditConfig<TDbContext>.EventValueResolver.Convert(entity.State),
 					LoggedAt = DateTime.UtcNow
 				};
 			}
@@ -51,8 +43,8 @@ namespace EntityFrameworkCore.Convention.Audit
 
 		public static bool TryGetAuditInfo<TDbContext>(EntityEntry entityEntry, out string table) where TDbContext : DbContext
 		{
-			var typeMetaCache = AuditCache<TDbContext>.TypeAuditMetaCache;
-			var typeTableCache = AuditCache<TDbContext>.TypeTableNameMap;
+			var typeMetaCache = EntityFrameworkAuditConfig<TDbContext>.TypeAuditMetaCache;
+			var typeTableCache = EntityFrameworkAuditConfig<TDbContext>.TypeTableNameMap;
 
 			var type = entityEntry.Entity.GetType();
 			if (typeMetaCache.ContainsKey(type) && typeMetaCache[type] == null)

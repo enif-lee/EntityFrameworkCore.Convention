@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkCore.Convention.Audit
 {
-	public class AuditNameResolver : IAuditEventValueResolver
+	public class DefaultAuditEventNameResolver : IAuditEventValueResolver
 	{
 		public string Convert(EntityState state)
 		{

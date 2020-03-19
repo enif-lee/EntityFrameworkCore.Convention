@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkCore.Convention.Audit
 {
-	internal static class AuditCache<TDbContext> where TDbContext : DbContext
+	internal static class EntityFrameworkAuditConfig<TDbContext> where TDbContext : DbContext
 	{
 		/// <summary>
 		///     엔티티 타입의 Attribute 존재 여부 캐싱을 위한 Map
@@ -18,6 +18,6 @@ namespace EntityFrameworkCore.Convention.Audit
 
 		public static Type DbContextType { get; } = typeof(TDbContext);
 
-		public static IAuditEventValueResolver EventValueResolver { get; set; } = new AuditNameResolver();
+		public static IAuditEventValueResolver EventValueResolver { get; set; } = new DefaultAuditEventNameResolver();
 	}
 }

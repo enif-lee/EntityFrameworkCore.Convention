@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkCore.Convention.Audit
 {
+	/// <summary>
+	/// 	Audit logging strategy attribute.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class)]
 	public class EntityAuditAttribute : Attribute
 	{
 		private readonly EntityState[] _states;

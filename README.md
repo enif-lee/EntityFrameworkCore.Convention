@@ -62,7 +62,7 @@ public class Something : ICreateAt, IUpdateAt, ICreator
 
 #### Enum Conversion Helper
 
-- [ ] Provide Enum with attribute conversion helper
+- Provide Enum with attribute conversion helper
 
 ```csharp
 public enum UserStatus
@@ -87,8 +87,10 @@ public DatabaseContext : ConventionDbContext
 
 ### Table Audit
 
-- [ ] Track and store changes of row for specific assigned tables.
-- [ ] Configure tracking strategy for each table. 
+#### Features
+-  Track and store changes of row for specific assigned tables.
+-  Configure tracking strategy for each entity.
+-  Support for project contain multiple `DbContext` type.
 
 ### Contribution Guide
 

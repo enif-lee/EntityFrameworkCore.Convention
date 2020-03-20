@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace EntityFrameworkCore.Convention
+namespace EntityFrameworkCore.Convention.Naming
 {
 	/// <summary>
 	///     Naming convention builder for entity framework core.

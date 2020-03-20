@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using EntityFrameworkCore.Convention.Helpers;
+using EntityFrameworkCore.Convention.StateExtension;
 using EntityFrameworkCore.Convention.Test.Helpers;
 using EntityFrameworkCore.Convention.Test.Infrastructure;
+using EntityFrameworkCore.Convention.WriteTime;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;

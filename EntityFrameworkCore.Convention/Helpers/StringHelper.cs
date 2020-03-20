@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace EntityFrameworkCore.Convention.Helpers
 {
-    public static class StringHelper
+    internal static class StringHelper
     {
         private static readonly Regex Splitter = new Regex(@"[\s|\-|_]+");
 

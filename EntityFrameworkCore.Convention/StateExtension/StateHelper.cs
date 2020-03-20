@@ -5,36 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using static System.Linq.Expressions.Expression;
 
-namespace EntityFrameworkCore.Convention.Helpers
+namespace EntityFrameworkCore.Convention.StateExtension
 {
-	public static class ModelBuilderHelper
+	public static class StateHelper
 	{
-		/// <summary>
-		/// 	Configure naming convention for entity frameworks.
-		/// </summary>
-		/// <param name="builder">Model builder of entity entity framework</param>
-		/// <param name="configure">Convention configure setter</param>
-		/// <returns>Origin model builder</returns>
-		public static ModelBuilder UseNamingConvention(this ModelBuilder builder, Action<ConventionBuilder> configure)
-		{
-			var conventionBuilder = new ConventionBuilder();
-			configure(conventionBuilder);
-
-			conventionBuilder.Apply(builder);
-			return builder;
-		}
-
-		/// <summary>
-		/// 	Apply specific naming convention for all settable name file of entities.
-		/// </summary>
-		/// <param name="builder">Model Builder</param>
-		/// <param name="convention">Convention</param>
-		/// <returns>origin model builder</returns>
-		public static ModelBuilder UseNamingConvention(this ModelBuilder builder, INamingConvention convention)
-		{
-			return builder.UseNamingConvention(cb => cb.UseNamingConvention(convention));
-		}
-
 		///  <summary>
 		/// 		Apply ignore logical delete rows for all entity types.
 		///  </summary>
@@ -60,6 +34,31 @@ namespace EntityFrameworkCore.Convention.Helpers
 			}
 
 			return builder;
+		}
+
+		private static readonly IDictionary<EntityState, State> StateMap = new Dictionary<EntityState, State>
+		{
+			[EntityState.Added] = State.Created,
+			[EntityState.Modified] = State.Updated,
+			[EntityState.Deleted] = State.Deleted
+		};
+
+		/// <summary>
+		/// 	Update state field value by entity's state.
+		/// </summary>
+		/// <param name="tracker"></param>
+		/// <returns></returns>
+		public static ChangeTracker UpdateStateFields(this ChangeTracker tracker)
+		{
+			foreach (var entry in tracker.Entries<IState>().Where(e => StateMap.ContainsKey(e.State)))
+			{
+				entry.Entity.State = StateMap[entry.State];
+
+				if (entry.State == EntityState.Deleted)
+					entry.State = EntityState.Modified;
+			}
+
+			return tracker;
 		}
 	}
 }

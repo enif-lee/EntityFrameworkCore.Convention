@@ -1,39 +1,44 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkCore.Convention.Audit
 {
+	/// <summary>
+	/// 	Base db context for processing audit logs.
+	/// </summary>
+	/// <typeparam name="TDbContext"></typeparam>
 	public abstract class AuditDbContextBase<TDbContext> : DbContext where TDbContext : DbContext
 	{
-		protected AuditDbContextBase()
+		private readonly IAuditProcessor<TDbContext> _processor;
+
+		protected AuditDbContextBase(IAuditProcessor<TDbContext> processor)
 		{
+			_processor = processor;
 		}
 
-		protected AuditDbContextBase(DbContextOptions options) : base(options)
+		protected AuditDbContextBase(DbContextOptions options, IAuditProcessor<TDbContext> processors) : base(options)
 		{
 		}
-
-		public DbSet<Audit> Audits { get; set; }
 
 		public override int SaveChanges(bool acceptAllChangesOnSuccess)
 		{
-			SaveAudits();
+			HandleAuditsAsync().Wait();
 			return base.SaveChanges(acceptAllChangesOnSuccess);
 		}
 
-		public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+		public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+			CancellationToken cancellationToken = new CancellationToken())
 		{
-			SaveAudits();
-			return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+			await HandleAuditsAsync();
+			return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
 		}
 
-		private void SaveAudits()
+		private async Task HandleAuditsAsync()
 		{
-			foreach (var audit in ChangeTracker.GetAudits<TDbContext>())
-			{
-				Audits.Add(audit);
-			}
+			var audits = ChangeTracker.GetAudits<TDbContext>().ToArray();
+			await _processor.HandleAuditsAsync(audits).ConfigureAwait(false);
 		}
 	}
 }

@@ -1,21 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace EntityFrameworkCore.Convention.Helpers
+namespace EntityFrameworkCore.Convention.WriteTime
 {
-	public static class ChangeTrackerHelper
+	public static class WriteTimeHelper
 	{
-		private static readonly IDictionary<EntityState, State> StateMap = new Dictionary<EntityState, State>
-		{
-			[EntityState.Added] = State.Created,
-			[EntityState.Modified] = State.Updated,
-			[EntityState.Deleted] = State.Deleted
-		};
-
-
 		/// <summary>
 		/// 	Update CreatedAt field to UtcNow of entities that implement ICreatedAt interface.
 		/// </summary>
@@ -40,7 +31,7 @@ namespace EntityFrameworkCore.Convention.Helpers
 			return tracker;
 		}
 
-		/// <summary>
+		/// <summary>e
 		/// 	Update UpdatedAt field to UtcNow
 		/// </summary>
 		/// <param name="tracker"></param>
@@ -62,24 +53,6 @@ namespace EntityFrameworkCore.Convention.Helpers
 		{
 			foreach (var entry in tracker.Entries<IUpdatedAt>().Where(e => e.State == EntityState.Modified || e.State == EntityState.Added))
 				entry.Entity.UpdatedAt = now;
-
-			return tracker;
-		}
-
-		/// <summary>
-		/// 	Update state field value by entity's state.
-		/// </summary>
-		/// <param name="tracker"></param>
-		/// <returns></returns>
-		public static ChangeTracker UpdateStateFields(this ChangeTracker tracker)
-		{
-			foreach (var entry in tracker.Entries<IState>().Where(e => StateMap.ContainsKey(e.State)))
-			{
-				entry.Entity.State = StateMap[entry.State];
-
-				if (entry.State == EntityState.Deleted)
-					entry.State = EntityState.Modified;
-			}
 
 			return tracker;
 		}

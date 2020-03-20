@@ -1,5 +1,6 @@
 using System;
 using EntityFrameworkCore.Convention.Helpers;
+using EntityFrameworkCore.Convention.Naming;
 using EntityFrameworkCore.Convention.Test.Fixture.Entities;
 using Microsoft.EntityFrameworkCore;
 

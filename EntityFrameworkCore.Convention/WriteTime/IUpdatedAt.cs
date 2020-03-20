@@ -1,6 +1,6 @@
 using System;
 
-namespace EntityFrameworkCore.Convention
+namespace EntityFrameworkCore.Convention.WriteTime
 {
     public interface IUpdatedAt
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using EntityFrameworkCore.Convention.Helpers;
 
-namespace EntityFrameworkCore.Convention
+namespace EntityFrameworkCore.Convention.Naming
 {
     public sealed class NamingConvention : INamingConvention
     {

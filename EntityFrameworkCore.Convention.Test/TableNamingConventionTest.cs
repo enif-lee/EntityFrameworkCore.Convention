@@ -1,4 +1,5 @@
 using System.Linq;
+using EntityFrameworkCore.Convention.Naming;
 using EntityFrameworkCore.Convention.Test.Fixture;
 using EntityFrameworkCore.Convention.Test.Fixture.Entities;
 using EntityFrameworkCore.Convention.Test.Infrastructure;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using EntityFrameworkCore.Convention.StateExtension;
+using EntityFrameworkCore.Convention.WriteTime;
 
 namespace EntityFrameworkCore.Convention.Test.Infrastructure
 {

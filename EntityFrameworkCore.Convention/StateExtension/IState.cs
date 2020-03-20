@@ -1,4 +1,4 @@
-namespace EntityFrameworkCore.Convention
+namespace EntityFrameworkCore.Convention.StateExtension
 {
 	public interface IState
 	{

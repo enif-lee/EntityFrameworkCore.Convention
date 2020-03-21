@@ -1,6 +1,6 @@
 using System;
 
-namespace EntityFrameworkCore.Convention.Attributes
+namespace EntityFrameworkCore.Convention.Naming
 {
     public class ColumnConventionAttribute : Attribute, INamingConventionAttribute
     {

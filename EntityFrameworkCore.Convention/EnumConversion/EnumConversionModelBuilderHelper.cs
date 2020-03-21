@@ -42,7 +42,7 @@ namespace EntityFrameworkCore.Convention.EnumConversion
 			{
 				var memberInfo = type.GetMember(name).First(m => m.DeclaringType == type);
 
-				var value = memberInfo.GetCustomAttribute<EnumMemberAttribute>()?.Value
+				var value = memberInfo.GetCustomAttribute<EnumValueAttribute>()?.Value
 				            ?? throw new InvalidOperationException($"The field({name}) of type({type.Name}) must have a EnumValueAttribute");
 
 				var enumKey = Enum.Parse<T>(name);

@@ -2,7 +2,9 @@ using System.Linq;
 using EntityFrameworkCore.Convention.Naming;
 using EntityFrameworkCore.Convention.Test.Fixture;
 using EntityFrameworkCore.Convention.Test.Fixture.Entities;
+using EntityFrameworkCore.Convention.Test.Fixtures.NamingConvention;
 using EntityFrameworkCore.Convention.Test.Infrastructure;
+using EntityFrameworkCore.Convention.Test.TestHelpers;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -17,29 +19,9 @@ namespace EntityFrameworkCore.Convention.Test
 	{
 		private readonly DbContextOptions _options;
 
-		public class NormalTestDb : DbContext
-		{
-			public NormalTestDb(DbContextOptions options) : base(options)
-			{
-			}
-
-			public DbSet<TestEntity> TestEntities { get; set; }
-
-		}
-
 		public TableNamingConventionTest()
 		{
-			var provider = new ServiceCollection()
-				.AddEntityFrameworkSqlite()
-				.Replace(ServiceDescriptor.Singleton<IModelSource, UncachedModelSource>())
-				.BuildServiceProvider();
-
-			var connection = new SqliteConnection("Data Source=:memory:");
-			connection.Open();
-			_options = new DbContextOptionsBuilder()
-				.UseSqlite(connection)
-				.UseInternalServiceProvider(provider)
-				.Options;
+			_options = InMemoryConnectionHelper.Generate();
 		}
 
 		[Test]

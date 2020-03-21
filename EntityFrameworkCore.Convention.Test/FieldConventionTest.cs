@@ -4,6 +4,7 @@ using EntityFrameworkCore.Convention.Helpers;
 using EntityFrameworkCore.Convention.StateExtension;
 using EntityFrameworkCore.Convention.Test.Helpers;
 using EntityFrameworkCore.Convention.Test.Infrastructure;
+using EntityFrameworkCore.Convention.Test.TestHelpers;
 using EntityFrameworkCore.Convention.WriteTime;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
@@ -24,12 +25,7 @@ namespace EntityFrameworkCore.Convention.Test
 
 		private FieldTestDb CreateTestDb(Action<ChangeTracker> changeTrack = null, Action<ModelBuilder> modelBuilder = null)
 		{
-			var connection = new SqliteConnection("Data Source=:memory:");
-			connection.Open();
-			var options = new DbContextOptionsBuilder()
-				.UseSqlite(connection)
-				.Options;
-			var db = new FieldTestDb(options, changeTrack, modelBuilder);
+			var db = new FieldTestDb(InMemoryConnectionHelper.Generate(), changeTrack, modelBuilder);
 			db.Database.EnsureCreated();
 			return db;
 		}

@@ -1,4 +1,4 @@
-namespace EntityFrameworkCore.Convention.Attributes
+namespace EntityFrameworkCore.Convention.Naming
 {
     public interface INamingConventionAttribute
     {

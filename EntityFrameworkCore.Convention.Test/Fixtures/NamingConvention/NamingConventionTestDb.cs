@@ -1,10 +1,9 @@
 using System;
-using EntityFrameworkCore.Convention.Helpers;
 using EntityFrameworkCore.Convention.Naming;
 using EntityFrameworkCore.Convention.Test.Fixture.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace EntityFrameworkCore.Convention.Test.Fixture
+namespace EntityFrameworkCore.Convention.Test.Fixtures.NamingConvention
 {
 	internal class TestDb : DbContext
 	{

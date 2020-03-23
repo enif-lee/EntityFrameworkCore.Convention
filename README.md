@@ -60,27 +60,42 @@ public class Something : ICreateAt, IUpdateAt, ICreator
 }
 ```
 
-#### Enum Conversion Helper
+#### Enum String Value Converter
 
-- Provide Enum with attribute conversion helper
+If you don't want to store enum value as int(number) value and you want to store enum value as string,
+you just attach `EnumValue` to all enum values with unique value and just call extension method `ModelBuilder.ApplyEnumValueConverter`
+then the `ApplyEnumValueConverter` method find properties that defined enum type of type parameter and apply 1:1 value converter.
 
+Additionally, this feature also help automatically maximum string length of original property. 
+If maximum length of `EnumValue` is changed, the model metadata of model type also will be changed.
+ 
 ```csharp
 public enum UserStatus
 {
-    [Value("BL")] Blocked,
-    [Value("LK")] Locked,
-    [Value("NM")] Normal,
-    [Value("DT")] Deleted,
-    [Value("HD")] Hidden
+    [EnumValue("BL")] 
+    Blocked,
+
+    [EnumValue("LK")] 
+    Locked,
+
+    [EnumValue("NM")] 
+    Normal,
+
+    [EnumValue("DT")] 
+    Deleted,
+
+    [EnumValue("HD")] 
+    Hidden
+
 }
 
-public DatabaseContext : ConventionDbContext
+public DatabaseContext : DbContext
 {
     public DbSet<User> Users { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        optionsBuilder.UseEnumConversion<UserStatus>();
+        modelBuilder.ApplyEnumValueConverter<UserStatus>();
     }
 }
 ```

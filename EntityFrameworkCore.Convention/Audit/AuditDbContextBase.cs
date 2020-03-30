@@ -20,6 +20,7 @@ namespace EntityFrameworkCore.Convention.Audit
 
 		protected AuditDbContextBase(DbContextOptions options, IAuditProcessor<TDbContext> processors) : base(options)
 		{
+			_processor = processors;
 		}
 
 		public override int SaveChanges(bool acceptAllChangesOnSuccess)

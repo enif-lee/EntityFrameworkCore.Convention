@@ -37,6 +37,38 @@ public class UserHistory
 
 ```
 
+#### State Extension
+
+If you want to log entity last state (New, Modified, Deleted) or apply logical deletion for entity, Here are extension for that.
+
+```
+public class SomeDb : DbContext
+{
+    // Define constructor and entity fiels.
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Enable logical deletion for IState Entities.
+        modelBuilder.ApplyIgnoreDeletedStateEntitiesFromQuery();
+        base.OnModelCreating(modelBuilder);
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        // Update entities that implemented IState.
+        ChangeTracker.UpdateStateFields();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+    {
+        // Update entities that implemented IState.
+        ChangeTracker.UpdateStateFields();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+}
+```
+
 #### BaseEntity
 
 - [ ] Provide ICreateAt, IUpdateAt Interface

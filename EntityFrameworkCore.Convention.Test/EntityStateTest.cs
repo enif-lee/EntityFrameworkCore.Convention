@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Reflection.Metadata;
 using EntityFrameworkCore.Convention.StateExtension;
 using EntityFrameworkCore.Convention.Test.Fixtures.StateExtension;
 using EntityFrameworkCore.Convention.Test.TestHelpers;

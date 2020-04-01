@@ -10,32 +10,24 @@ This is a library that collects frequently used / implemented functions as below
 
 #### Naming Convention
 
-- [ ] Global Table Default Schema
-- [ ] Global Table Prefix/Suffix
-- [ ] Global/Table Scope Column Prefix/Suffix
-- [ ] Configure Specific Table Naming Convention
-- [ ] Configure Specific Column Naming Convention { built in kebob, snake, camel, Pascal }
+If you need to configure some naming convention for following legacy database. Follow below guide for applying global table/column convention
+
+##### Preconfigured Table Naming Convention
 
 ```csharp
-optionsBuilder
-    .UseNamingConvention(Conventions.Pascal)
-    .UseGlobalTablePrefix("ef")
-    .UseGlobalColumnPrefix("c")
-;
-
-// Entity Classes
-
-[Table]
-[ColumnNaming(Prefix: "uh")]
-public class UserHistory
+public class NamingDb : DbContext
 {
-    public long Id { get; set; } // will be uh_id
+    public DbSet<TestEntity> TestEntities { get; set; }
 
-    [ColumnNaming(string.Empty)
-    public long IgnoredColumn { get; set; } // will be ignored_column
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // and TestEntity class will has 'test_entities' as name
+        modelBuilder.UseNamingConvention(builder => builder.UseTableNamingConvention(NamingConvention.LowerSnakeCase));
+    }
 }
-
 ```
+
+// Todo to write more example here
 
 #### State Extension
 
@@ -69,26 +61,34 @@ public class SomeDb : DbContext
 }
 ```
 
-#### BaseEntity
+#### WriteTime Extension.
 
-- [ ] Provide ICreateAt, IUpdateAt Interface
-- [ ] Provide ICreator, IUpdater Interface
+Entity need to record `created_at` or `updated_at` as database independent. Just implement `ICreatedAt` and `IUpdatedAt` in your entity class.
+And call `UpdateWriteTimeFields` of `ChangeTracker` in override `SaveChanges` and `SaveChangesAsync`
 
 ```csharp
-optionsBuilder
-    .UseAutoUpdateDateTime()
-    .UseAutoUpdateAuthor(() => Http.Context.Session['userId'])
-;
+public SomeDb {
+    public DbSet<ExampleEntity> Entities { get; set; }
 
-protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-{
-    optionsBuilder.UseEnumConversion<UserStatus>();
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        ChangeTracker.UpdateWriteTimeFields();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+    {
+        ChangeTracker.UpdateWriteTimeFields();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
 }
 
-// Entity Class
-public class Something : ICreateAt, IUpdateAt, ICreator
+public class ExampleEntity : ICreatedAt, IUpdatedAt
 {
     public long Id { get; set; }
+    public string Message { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
 ```
 

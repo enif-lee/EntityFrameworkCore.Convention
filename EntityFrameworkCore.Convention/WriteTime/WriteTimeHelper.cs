@@ -8,6 +8,18 @@ namespace EntityFrameworkCore.Convention.WriteTime
 	public static class WriteTimeHelper
 	{
 		/// <summary>
+		/// 	Update CreatedAt and UpdatedAt fields of entity implement ICreateAt, IUpdatedAt to UtcNow 
+		/// </summary>
+		/// <param name="tracker"></param>
+		/// <returns></returns>
+		public static ChangeTracker UpdateWriteTimeFields(this ChangeTracker tracker)
+		{
+			return tracker
+				.UpdateCreatedAtFields()
+				.UpdateUpdatedAtFields();
+		}
+		
+		/// <summary>
 		/// 	Update CreatedAt field to UtcNow of entities that implement ICreatedAt interface.
 		/// </summary>
 		/// <param name="tracker"></param>

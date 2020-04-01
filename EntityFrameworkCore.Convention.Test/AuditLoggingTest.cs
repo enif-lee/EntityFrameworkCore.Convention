@@ -19,7 +19,7 @@ namespace EntityFrameworkCore.Convention.Test
 		}
 
 		[Test]
-		public void Test()
+		public void GetAudits_Should_Process3Audits_When_EntityIsStoredAndModifiedAndDeleted()
 		{
 			// Given
 			var entity = Db.Entities.Add(new AuditLoggingTestEntity
@@ -34,6 +34,18 @@ namespace EntityFrameworkCore.Convention.Test
 			
 			// When
 			SpyAuditProccesor.Audits.Should().HaveCount(3);
+		}
+
+		[Test]
+		public void GetAudits_Should_HavePrimaryKeyData_When_EntityIsCreated()
+		{
+			// Todo Not yet implemented
+		}
+
+		[Test]
+		public void GetAudits_Shoud_Process2Audits_When_EntityIsConfiguredWithOnlyModifiedAndDeleted()
+		{
+			// Todo not yet implemented
 		}
 	}
 }

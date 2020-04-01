@@ -19,16 +19,16 @@ namespace EntityFrameworkCore.Convention.Audit
 			[EntityState.Deleted] = State.Deleted
 		};
 
-		public static IEnumerable<Audit> GetAudits<TDbContext>(this ChangeTracker context) where TDbContext : DbContext
+		public static IEnumerable<Audit> GetAudits<TDbContext>(IEnumerable<EntityEntry> entityEntries) where TDbContext : DbContext
 		{
-			foreach (var entity in context.Entries())
+			foreach (var entity in entityEntries)
 			{
-				if (TryGetAuditInfo<DbContext>(entity, out var table))
+				if (!TryGetAuditInfo<DbContext>(entity, out var table))
 					continue;
 
 				var keys = entity.Properties
 					.Where((entry, i) => entity.IsKeySet)
-					.Select(key => (property: key.Metadata.Name, value: key.CurrentValue))
+					.Select(key => new KeyValuePair<string, object>(key.Metadata.Name, key.CurrentValue))
 					.ToArray();
 
 				yield return new Audit

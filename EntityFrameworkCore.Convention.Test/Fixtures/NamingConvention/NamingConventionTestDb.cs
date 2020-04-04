@@ -1,6 +1,5 @@
 using System;
 using EntityFrameworkCore.Convention.Naming;
-using EntityFrameworkCore.Convention.Test.Fixture.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkCore.Convention.Test.Fixtures.NamingConvention

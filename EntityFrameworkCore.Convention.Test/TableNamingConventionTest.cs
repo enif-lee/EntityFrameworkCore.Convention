@@ -1,16 +1,9 @@
 using System.Linq;
 using EntityFrameworkCore.Convention.Naming;
-using EntityFrameworkCore.Convention.Test.Fixture;
-using EntityFrameworkCore.Convention.Test.Fixture.Entities;
 using EntityFrameworkCore.Convention.Test.Fixtures.NamingConvention;
-using EntityFrameworkCore.Convention.Test.Infrastructure;
 using EntityFrameworkCore.Convention.Test.TestHelpers;
 using FluentAssertions;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using NUnit.Framework;
 
 namespace EntityFrameworkCore.Convention.Test

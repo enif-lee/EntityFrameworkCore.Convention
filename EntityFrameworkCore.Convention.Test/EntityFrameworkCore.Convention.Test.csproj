@@ -17,5 +17,4 @@
     <ItemGroup>
       <ProjectReference Include="..\EntityFrameworkCore.Convention\EntityFrameworkCore.Convention.csproj" />
     </ItemGroup>
-
 </Project>

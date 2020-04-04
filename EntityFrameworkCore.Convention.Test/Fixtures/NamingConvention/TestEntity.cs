@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace EntityFrameworkCore.Convention.Test.Fixture.Entities
+namespace EntityFrameworkCore.Convention.Test.Fixtures.NamingConvention
 {
     public class TestEntity
     {

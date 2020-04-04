@@ -1,10 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
+
+
+  <PropertyGroup>
+    <PackageId>EntityFrameworkCore.Convention</PackageId>
+    <Version>3.1.0</Version>
+    <Authors>Jinseoung Lee</Authors>
+    <PackageTags>entityframework;naming;convention;naming-convention;writetime;audit;</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/enif-lee/EntityFrameworkCore.Convention</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/enif-lee/EntityFrameworkCore.Convention/blob/master/LICENSE</PackageLicenseUrl>
+    <DocumentationFile>bin\Debug\EntityFrameworkCore.Convention.xml</DocumentationFile>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DocumentationFile>bin\Debug\EntityFrameworkCore.Convention.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DocumentationFile>bin\Release\EntityFrameworkCore.Convention.xml</DocumentationFile>
+  </PropertyGroup>
+  
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.1" />
+    <PackageReference Include="Castle.Core" Version="4.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.2" />
   </ItemGroup>
 </Project>
